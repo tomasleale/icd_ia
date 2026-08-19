@@ -72,7 +72,7 @@ DEMOGRAPHIC_CODES: List[str] = ["sexo", "edad", "niveduc", "ocupacion", "nse"]
 
 PYMES_CODES: List[str] = [
     "id", "sexo", "edad", "niveduc", "ocupacion", "nse",
-    "p01", "p01_otro", "p02", "p03", "p04",
+    "p01", "p01_otro", "p02", "p02_otro", "p03", "p03_otro", "p04",
 ]
 
 COMP_CODES: List[str] = [
@@ -95,7 +95,9 @@ CODE_DESCRIPTIONS: Dict[str, Dict[str, str]] = {
         "p01": "Tarea del negocio que consume mas tiempo",
         "p01_otro": "P01 - otra respuesta",
         "p02": "Principal fuente de ayuda",
+        "p02_otro": "P02 - otra respuesta",
         "p03": "Barreras para el crecimiento del negocio",
+        "p03_otro": "P03 - otra respuesta",
         "p04": "Tiempo semanal dispuesto a dedicar a aprender herramientas digitales",
     },
     "comp": {
@@ -123,12 +125,15 @@ CATEGORY_ORDERS: Dict[str, List[str]] = {
     "sexo": ["femenino", "masculino"],
     "edad": ["[18-30]", "[31-40]", "[41-50]", "[51-60]", "[61+]"],
     "niveduc": [
+        "basica incompleta",
+        "basica completa",
         "media incompleta",
         "media completa",
         "tecnica superior incompleta",
         "tecnica superior completa",
         "universitaria incompleta",
         "universitaria completa",
+        "postgrado",
     ],
     "ocupacion": [
         "cesante",
@@ -255,6 +260,7 @@ def normalize_text(value, fold_enye: bool = False) -> str:
     if fold_enye:
         out = out.replace("ñ", "n")
     out = re.sub(r"\s+", " ", out)
+    out = re.sub(r"\s*-\s*", "-", out)
     return out
 
 
@@ -364,7 +370,7 @@ def lowercase_df(df: pd.DataFrame) -> pd.DataFrame:
             new_cats = [c.strip().lower() if isinstance(c, str) else c
                         for c in s.cat.categories]
             out[col] = s.cat.rename_categories(new_cats)
-        elif s.dtype == object:
+        elif s.dtype == object or pd.api.types.is_string_dtype(s.dtype):
             out[col] = s.map(
                 lambda x: x.strip().lower() if isinstance(x, str) else x)
     return set_labels(out, labels)
