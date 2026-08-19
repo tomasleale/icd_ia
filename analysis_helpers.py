@@ -57,6 +57,9 @@ __all__ = [
     "validate_dataset",
     "set_theme", "bar_freq", "stacked_bar", "heatmap", "missingness_heatmap",
     "save_fig", "cramers_v", "chi2_association",
+    "correspondence_analysis", "ca_biplot",
+    "response_profile", "chi2_scale_profile", "combined_profile",
+    "plot_dendrogram",
 ]
 
 # =============================================================================
@@ -958,6 +961,190 @@ def chi2_association(df: pd.DataFrame, rows: str, cols: str) -> Dict[str, object
         "pct_cells_lt5": float(100 * (expected < 5).mean()),
         "significant": bool(p < 0.05),
     }
+
+
+# =============================================================================
+# 12. PATTERN DETECTION -- correspondence analysis & profile clustering
+#     (used from Step 7 onward)
+# =============================================================================
+
+def correspondence_analysis(ct: pd.DataFrame,
+                            n_components: int = 2) -> Dict[str, object]:
+    """Simple correspondence analysis (CA) via SVD of standardized residuals.
+
+    Classic textbook formulation (Greenacre): for a contingency table N with
+    grand total n, build the correspondence matrix P = N / n, row/column
+    masses (marginal profiles), and the matrix of chi-square standardized
+    residuals S = (P - rc') / sqrt(rc'), where r and c are the row/column
+    mass vectors. The SVD of S, S = U diag(s) V', gives principal row/column
+    coordinates after rescaling by the inverse square root of the masses.
+
+    The sum of squared singular values equals total inertia = chi2 / n
+    (i.e. phi-squared), so `explained_variance` sums to 1 across all
+    dimensions and Cramer's V = sqrt(total_inertia / min(rows-1, cols-1))
+    recovers the same effect size reported by `cramers_v()`.
+
+    Parameters
+    ----------
+    ct : contingency table of raw counts (rows = one categorical variable,
+        columns = another). No pre-normalization needed.
+    n_components : number of CA dimensions to keep (2 for biplots).
+
+    Returns
+    -------
+    dict with keys:
+        row_coords, col_coords : DataFrames of principal coordinates
+        explained_variance : array, share of total inertia per kept dimension
+        total_inertia : float, phi-squared = chi2 / n
+    """
+    N = ct.to_numpy(dtype=float)
+    n = N.sum()
+    if n <= 0:
+        raise ValueError("Contingency table is empty (sum == 0).")
+
+    P = N / n
+    row_masses = P.sum(axis=1)
+    col_masses = P.sum(axis=0)
+    expected = np.outer(row_masses, col_masses)
+    resid = np.divide(P - expected, np.sqrt(expected),
+                      out=np.zeros_like(P), where=expected > 0)
+
+    U, s, Vt = np.linalg.svd(resid, full_matrices=False)
+    k = min(n_components, len(s))
+    Uk, sk, Vtk = U[:, :k], s[:k], Vt[:k, :]
+
+    row_std = np.divide(Uk, np.sqrt(row_masses)[:, None],
+                        out=np.zeros_like(Uk), where=row_masses[:, None] > 0)
+    col_std = np.divide(Vtk.T, np.sqrt(col_masses)[:, None],
+                        out=np.zeros_like(Vtk.T), where=col_masses[:, None] > 0)
+    row_coords = row_std * sk[None, :]
+    col_coords = col_std * sk[None, :]
+
+    inertia_full = s ** 2
+    total_inertia = float(inertia_full.sum())
+    explained = (inertia_full[:k] / total_inertia
+                if total_inertia > 0 else np.zeros(k))
+
+    dims = [f"Dim{i + 1}" for i in range(k)]
+    return {
+        "row_coords": pd.DataFrame(row_coords, index=ct.index, columns=dims),
+        "col_coords": pd.DataFrame(col_coords, index=ct.columns, columns=dims),
+        "explained_variance": explained,
+        "total_inertia": total_inertia,
+    }
+
+
+def ca_biplot(ca_result: Dict[str, object],
+             ax=None,
+             title: Optional[str] = None,
+             row_label: str = "demografia",
+             col_label: str = "respuesta",
+             row_color: Optional[str] = None,
+             col_color: Optional[str] = None):
+    """Symmetric CA biplot: demographic categories (o) + response categories (^)."""
+    plt = _require_mpl()
+    if ax is None:
+        _, ax = plt.subplots(figsize=(8, 7))
+
+    rc = ca_result["row_coords"]
+    cc = ca_result["col_coords"]
+    row_color = row_color or PALETTE[0]
+    col_color = col_color or PALETTE[1]
+
+    ax.axhline(0, color="#999999", lw=0.8, zorder=1)
+    ax.axvline(0, color="#999999", lw=0.8, zorder=1)
+
+    ax.scatter(rc.iloc[:, 0], rc.iloc[:, 1], c=row_color, s=110, marker="o",
+               edgecolor="white", linewidth=0.8, label=row_label, zorder=3)
+    for idx, x, y in zip(rc.index, rc.iloc[:, 0], rc.iloc[:, 1]):
+        ax.annotate(_wrap(idx, 22), (x, y), textcoords="offset points",
+                    xytext=(7, 5), fontsize=8.5, color=row_color, weight="semibold")
+
+    ax.scatter(cc.iloc[:, 0], cc.iloc[:, 1], c=col_color, s=110, marker="^",
+               edgecolor="white", linewidth=0.8, label=col_label, zorder=3)
+    for idx, x, y in zip(cc.index, cc.iloc[:, 0], cc.iloc[:, 1]):
+        ax.annotate(_wrap(idx, 22), (x, y), textcoords="offset points",
+                    xytext=(7, -10), fontsize=8.5, color=col_color)
+
+    ev = ca_result["explained_variance"]
+    ax.set_xlabel(f"Dim 1 ({100 * ev[0]:.1f}% de la inercia)" if len(ev) else "Dim 1")
+    ax.set_ylabel(f"Dim 2 ({100 * ev[1]:.1f}% de la inercia)" if len(ev) > 1 else "Dim 2")
+    ax.legend(loc="best", frameon=False)
+    ax.grid(alpha=0.3)
+    if title:
+        ax.set_title(title, loc="left")
+    return ax
+
+
+def response_profile(df: pd.DataFrame,
+                     group_col: str,
+                     response_col: str) -> pd.DataFrame:
+    """Row-normalized crosstab: for each level of group_col, the frequency
+    distribution (profile) over response_col categories. Rows summing to
+    zero (groups with no observations) are dropped."""
+    ct = pd.crosstab(df[group_col], df[response_col], dropna=False)
+    ct = ct.loc[ct.sum(axis=1) > 0]
+    return ct.div(ct.sum(axis=1), axis=0)
+
+
+def chi2_scale_profile(profile: pd.DataFrame) -> pd.DataFrame:
+    """Rescale profile columns by 1/sqrt(average column profile).
+
+    This is the same transform correspondence analysis applies internally
+    to turn chi-square distance into ordinary Euclidean distance. Applying
+    it before Ward-linkage clustering lets `scipy.cluster.hierarchy.linkage`
+    (which requires Euclidean input for a valid Ward criterion) approximate
+    chi-square-distance clustering on categorical response profiles.
+    """
+    weights = profile.mean(axis=0).replace(0, np.nan)
+    return profile.div(np.sqrt(weights), axis=1).fillna(0)
+
+
+def combined_profile(df: pd.DataFrame,
+                     group_col: str,
+                     response_cols: Sequence[str]) -> pd.DataFrame:
+    """Concatenate chi-square-scaled response profiles across several
+    response variables into one wide matrix (groups x categories), for
+    clustering demographic levels on their *overall* response pattern
+    rather than a single question."""
+    blocks = []
+    for resp in response_cols:
+        prof = response_profile(df, group_col, resp)
+        scaled = chi2_scale_profile(prof)
+        scaled.columns = [f"{resp}::{c}" for c in scaled.columns]
+        blocks.append(scaled)
+    return pd.concat(blocks, axis=1).fillna(0)
+
+
+def plot_dendrogram(profile: pd.DataFrame,
+                    method: str = "ward",
+                    ax=None,
+                    title: Optional[str] = None,
+                    color_threshold: Optional[float] = None,
+                    label_wrap: int = 18):
+    """Hierarchical clustering dendrogram over a (groups x features) profile
+    matrix, e.g. the output of `combined_profile()` / `chi2_scale_profile()`.
+
+    Returns (ax, Z) where Z is the scipy linkage matrix.
+    """
+    plt = _require_mpl()
+    from scipy.cluster.hierarchy import linkage, dendrogram
+
+    Z = linkage(profile.values, method=method)
+    if ax is None:
+        _, ax = plt.subplots(figsize=(max(7, 1.3 * len(profile) + 2), 5))
+
+    labels = [_wrap(str(i), label_wrap) for i in profile.index]
+    dendrogram(Z, labels=labels, ax=ax, color_threshold=color_threshold,
+              leaf_font_size=10)
+    ax.set_ylabel(f"Distancia ({method}, perfiles escalados chi-cuadrado)")
+    ax.grid(axis="x", visible=False)
+    ax.tick_params(axis="x", rotation=30)
+    for lbl in ax.get_xticklabels():
+        lbl.set_ha("right")
+    if title:
+        ax.set_title(title, loc="left")
+    return ax, Z
 
 
 # =============================================================================
