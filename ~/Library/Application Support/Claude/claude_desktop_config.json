@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "colab": {
+      "command": "npx",
+      "args": ["-y", "@google/colab-mcp"],
+      "env": {
+        "COLAB_AUTH_MODE": "oauth"
+      }
+    }
+  }
+}

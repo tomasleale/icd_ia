@@ -1,0 +1,410 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1787169867.7787116,
+    "seen": 1787173551.110146,
+    "ast_hash": "c5dba52a9fdb760908772b08bbb0d91a",
+    "semantic_hash": "c5dba52a9fdb760908772b08bbb0d91a"
+  },
+  "analysis_helpers.py": {
+    "mtime": 1787168518.1757698,
+    "seen": 1787173551.110147,
+    "ast_hash": "35af1dff675d06163e68d8f0f30ed92d",
+    "semantic_hash": "35af1dff675d06163e68d8f0f30ed92d"
+  },
+  "~/Library/Application Support/Claude/claude_desktop_config.json": {
+    "mtime": 1787161087.5351138,
+    "seen": 1787173551.1101482,
+    "ast_hash": "d95a24d4518005cd78207c0d39b64d6a",
+    "semantic_hash": "d95a24d4518005cd78207c0d39b64d6a"
+  },
+  "ANALYSIS_SUMMARY.md": {
+    "mtime": 1787171813.514677,
+    "seen": 1787173551.1101491,
+    "ast_hash": "813042fa79c9e4fb3342a7be2faea099",
+    "semantic_hash": "813042fa79c9e4fb3342a7be2faea099"
+  },
+  "CLAUDE.md": {
+    "mtime": 1787155335.794781,
+    "seen": 1787173551.1101491,
+    "ast_hash": "bcb03c17e57273565c89905f26b73eba",
+    "semantic_hash": "bcb03c17e57273565c89905f26b73eba"
+  },
+  "PIPELINE_PLAN.md": {
+    "mtime": 1787159331.5530355,
+    "seen": 1787173551.1101499,
+    "ast_hash": "5cf5fdf09353ef7c2534863b1e0c6d9a",
+    "semantic_hash": "5cf5fdf09353ef7c2534863b1e0c6d9a"
+  },
+  "USE_CASES.md": {
+    "mtime": 1787171134.7021592,
+    "seen": 1787173551.1101499,
+    "ast_hash": "c31183b8155a1484262206626c59e81b",
+    "semantic_hash": "c31183b8155a1484262206626c59e81b"
+  },
+  "figures/comp/ca_biplots/ca_edad_x_p01.png": {
+    "mtime": 1787171976.5159562,
+    "seen": 1787173551.110156,
+    "ast_hash": "598f58b0b31c6b29a2e3b875019f9848",
+    "semantic_hash": "598f58b0b31c6b29a2e3b875019f9848"
+  },
+  "figures/comp/ca_biplots/ca_niveduc_x_p01.png": {
+    "mtime": 1787171977.1393268,
+    "seen": 1787173551.110158,
+    "ast_hash": "dc76e2decd440ad352a141985596d3ca",
+    "semantic_hash": "dc76e2decd440ad352a141985596d3ca"
+  },
+  "figures/comp/ca_biplots/ca_niveduc_x_p02_multiselect_summary.png": {
+    "mtime": 1787171977.4123046,
+    "seen": 1787173551.110158,
+    "ast_hash": "f2622cda9d03b8938734721b51dc2ab8",
+    "semantic_hash": "f2622cda9d03b8938734721b51dc2ab8"
+  },
+  "figures/comp/ca_biplots/ca_nse_x_p01.png": {
+    "mtime": 1787171976.2659893,
+    "seen": 1787173551.1101592,
+    "ast_hash": "14fb4b19e33c7a798398fca0bf1d72fe",
+    "semantic_hash": "14fb4b19e33c7a798398fca0bf1d72fe"
+  },
+  "figures/comp/ca_biplots/ca_ocupacion_x_p01.png": {
+    "mtime": 1787171976.8038542,
+    "seen": 1787173551.1101592,
+    "ast_hash": "df97fed5793489fb8e02443ac04bea60",
+    "semantic_hash": "df97fed5793489fb8e02443ac04bea60"
+  },
+  "figures/comp/clustering/dendrogram_edad.png": {
+    "mtime": 1787171977.6118562,
+    "seen": 1787173551.1101599,
+    "ast_hash": "b4ec58ee4542da68654a37f9def4f901",
+    "semantic_hash": "b4ec58ee4542da68654a37f9def4f901"
+  },
+  "figures/comp/clustering/dendrogram_niveduc.png": {
+    "mtime": 1787171977.7983844,
+    "seen": 1787173551.1101599,
+    "ast_hash": "143cec4e2bf15be1f0060135790d771d",
+    "semantic_hash": "143cec4e2bf15be1f0060135790d771d"
+  },
+  "figures/comp/comp_edad_bar.png": {
+    "mtime": 1787171972.7247531,
+    "seen": 1787173551.1101599,
+    "ast_hash": "ac4660cf3e3af58e50bbfdde9326e0ca",
+    "semantic_hash": "ac4660cf3e3af58e50bbfdde9326e0ca"
+  },
+  "figures/comp/comp_lr_coef_importance.png": {
+    "mtime": 1787171979.1883678,
+    "seen": 1787173551.1101608,
+    "ast_hash": "fd290dcfca8ad42e45d50fbbf6dd3988",
+    "semantic_hash": "fd290dcfca8ad42e45d50fbbf6dd3988"
+  },
+  "figures/comp/comp_missingness_heatmap.png": {
+    "mtime": 1787171979.8567116,
+    "seen": 1787173551.1101608,
+    "ast_hash": "cb8b26827bcf9817256097b9fb366339",
+    "semantic_hash": "cb8b26827bcf9817256097b9fb366339"
+  },
+  "figures/comp/comp_niveduc_bar.png": {
+    "mtime": 1787171972.91116,
+    "seen": 1787173551.110162,
+    "ast_hash": "e2f1385fe463d53d1c03e74cc6c91a54",
+    "semantic_hash": "e2f1385fe463d53d1c03e74cc6c91a54"
+  },
+  "figures/comp/comp_nse_bar.png": {
+    "mtime": 1787171973.4606798,
+    "seen": 1787173551.110162,
+    "ast_hash": "fa55a10a1723cb0ae23bc19dfb2dc91e",
+    "semantic_hash": "fa55a10a1723cb0ae23bc19dfb2dc91e"
+  },
+  "figures/comp/comp_ocupacion_bar.png": {
+    "mtime": 1787171973.170182,
+    "seen": 1787173551.110163,
+    "ast_hash": "baec544340248ef6c0ed94dfabd3da1d",
+    "semantic_hash": "baec544340248ef6c0ed94dfabd3da1d"
+  },
+  "figures/comp/comp_p01_bar.png": {
+    "mtime": 1787171973.6422243,
+    "seen": 1787173551.110163,
+    "ast_hash": "a58f93cdf34ca92309dd546e5f4dc5e5",
+    "semantic_hash": "a58f93cdf34ca92309dd546e5f4dc5e5"
+  },
+  "figures/comp/comp_p02_multiselect_bar.png": {
+    "mtime": 1787171973.898943,
+    "seen": 1787173551.110163,
+    "ast_hash": "b4dc8ae8591c2ce35b7a55e26ad5d8d4",
+    "semantic_hash": "b4dc8ae8591c2ce35b7a55e26ad5d8d4"
+  },
+  "figures/comp/comp_p02_selections_per_respondent_bar.png": {
+    "mtime": 1787171974.1107912,
+    "seen": 1787173551.110164,
+    "ast_hash": "a1776fbcf07fb650774da4992d2b55b0",
+    "semantic_hash": "a1776fbcf07fb650774da4992d2b55b0"
+  },
+  "figures/comp/comp_p03_bar.png": {
+    "mtime": 1787171974.2972991,
+    "seen": 1787173551.110164,
+    "ast_hash": "1f2d0648024f0b262290459a9adf4069",
+    "semantic_hash": "1f2d0648024f0b262290459a9adf4069"
+  },
+  "figures/comp/comp_rf_importance.png": {
+    "mtime": 1787171979.4855938,
+    "seen": 1787173551.1101649,
+    "ast_hash": "0b24dec94727f3b37f228e278292e88d",
+    "semantic_hash": "0b24dec94727f3b37f228e278292e88d"
+  },
+  "figures/comp/comp_sexo_bar.png": {
+    "mtime": 1787171972.5818694,
+    "seen": 1787173551.1101649,
+    "ast_hash": "c674b7abb36013f3e55703b1eaa31886",
+    "semantic_hash": "c674b7abb36013f3e55703b1eaa31886"
+  },
+  "figures/comp/cramer_v_heatmap.png": {
+    "mtime": 1787171975.9795678,
+    "seen": 1787173551.110166,
+    "ast_hash": "07d3ebbcb021925332e6f7d63f05aaf2",
+    "semantic_hash": "07d3ebbcb021925332e6f7d63f05aaf2"
+  },
+  "figures/pymes/ca_biplots/ca_edad_x_p03.png": {
+    "mtime": 1787170166.3744576,
+    "seen": 1787173551.110166,
+    "ast_hash": "fc0428b8e6d31e4ca16fe789e050784c",
+    "semantic_hash": "fc0428b8e6d31e4ca16fe789e050784c"
+  },
+  "figures/pymes/ca_biplots/ca_niveduc_x_p04.png": {
+    "mtime": 1787170166.6083648,
+    "seen": 1787173551.110166,
+    "ast_hash": "8675489f72be93dd0a585fb5d66a8d81",
+    "semantic_hash": "8675489f72be93dd0a585fb5d66a8d81"
+  },
+  "figures/pymes/ca_biplots/ca_nse_x_p02.png": {
+    "mtime": 1787170166.8438551,
+    "seen": 1787173551.110167,
+    "ast_hash": "a8c59c49a8b5152fa0458f91515a8032",
+    "semantic_hash": "a8c59c49a8b5152fa0458f91515a8032"
+  },
+  "figures/pymes/clustering/dendrogram_edad.png": {
+    "mtime": 1787170167.0223932,
+    "seen": 1787173551.110167,
+    "ast_hash": "23c5846015d58f70e5f0994ea371c054",
+    "semantic_hash": "23c5846015d58f70e5f0994ea371c054"
+  },
+  "figures/pymes/clustering/dendrogram_niveduc.png": {
+    "mtime": 1787170167.2011325,
+    "seen": 1787173551.110168,
+    "ast_hash": "e78f1af7155ad8a46946a1da4a07a6eb",
+    "semantic_hash": "e78f1af7155ad8a46946a1da4a07a6eb"
+  },
+  "figures/pymes/cramer_v_heatmap.png": {
+    "mtime": 1787170165.6135423,
+    "seen": 1787173551.110168,
+    "ast_hash": "f94050df5aa21aac0e2548d228033df7",
+    "semantic_hash": "f94050df5aa21aac0e2548d228033df7"
+  },
+  "figures/pymes/crosstabs/pymes_edad_x_p01.png": {
+    "mtime": 1787170160.428971,
+    "seen": 1787173551.1101692,
+    "ast_hash": "8da0bbd3c03633cb727d617fce00fe2f",
+    "semantic_hash": "8da0bbd3c03633cb727d617fce00fe2f"
+  },
+  "figures/pymes/crosstabs/pymes_edad_x_p02.png": {
+    "mtime": 1787170160.633177,
+    "seen": 1787173551.1101692,
+    "ast_hash": "245fc329b7b20c8e0d2fc9682dc5e875",
+    "semantic_hash": "245fc329b7b20c8e0d2fc9682dc5e875"
+  },
+  "figures/pymes/crosstabs/pymes_edad_x_p03.png": {
+    "mtime": 1787170160.8178856,
+    "seen": 1787173551.1101692,
+    "ast_hash": "5df7993e6ba6dbfb94c4ae01989e331b",
+    "semantic_hash": "5df7993e6ba6dbfb94c4ae01989e331b"
+  },
+  "figures/pymes/crosstabs/pymes_niveduc_x_p01.png": {
+    "mtime": 1787170161.3906305,
+    "seen": 1787173551.1101701,
+    "ast_hash": "e4a587bdf5758c5d67bcac9b4b89f2ff",
+    "semantic_hash": "e4a587bdf5758c5d67bcac9b4b89f2ff"
+  },
+  "figures/pymes/crosstabs/pymes_niveduc_x_p02.png": {
+    "mtime": 1787170161.6669748,
+    "seen": 1787173551.1101701,
+    "ast_hash": "94575954e210ba725f37718dc189bea6",
+    "semantic_hash": "94575954e210ba725f37718dc189bea6"
+  },
+  "figures/pymes/crosstabs/pymes_niveduc_x_p03.png": {
+    "mtime": 1787170161.9210603,
+    "seen": 1787173551.1101708,
+    "ast_hash": "88b2ef35548da5790a98619c6227f8cc",
+    "semantic_hash": "88b2ef35548da5790a98619c6227f8cc"
+  },
+  "figures/pymes/crosstabs/pymes_niveduc_x_p04.png": {
+    "mtime": 1787170162.1745152,
+    "seen": 1787173551.1101708,
+    "ast_hash": "c43f3b95d9d1cf56df1adfc16dfc7666",
+    "semantic_hash": "c43f3b95d9d1cf56df1adfc16dfc7666"
+  },
+  "figures/pymes/crosstabs/pymes_niveduc_x_p04_bin.png": {
+    "mtime": 1787170162.4129899,
+    "seen": 1787173551.1101708,
+    "ast_hash": "714af42f67f883bfaa3498c6511819c6",
+    "semantic_hash": "714af42f67f883bfaa3498c6511819c6"
+  },
+  "figures/pymes/crosstabs/pymes_nse_x_p01.png": {
+    "mtime": 1787170163.9603252,
+    "seen": 1787173551.1101718,
+    "ast_hash": "d3d796b4b71f08295d2c170d73ceb2af",
+    "semantic_hash": "d3d796b4b71f08295d2c170d73ceb2af"
+  },
+  "figures/pymes/crosstabs/pymes_nse_x_p02.png": {
+    "mtime": 1787170164.1508207,
+    "seen": 1787173551.1101718,
+    "ast_hash": "3aa20182069d06b0c18939a7c23d1ddc",
+    "semantic_hash": "3aa20182069d06b0c18939a7c23d1ddc"
+  },
+  "figures/pymes/crosstabs/pymes_nse_x_p03.png": {
+    "mtime": 1787170164.3321574,
+    "seen": 1787173551.110173,
+    "ast_hash": "0e0c09d8e594c8364ff8f7e39b2d98fe",
+    "semantic_hash": "0e0c09d8e594c8364ff8f7e39b2d98fe"
+  },
+  "figures/pymes/crosstabs/pymes_nse_x_p04.png": {
+    "mtime": 1787170164.5047436,
+    "seen": 1787173551.110174,
+    "ast_hash": "a6984fa493f17de1a3b3f9109ab418a5",
+    "semantic_hash": "a6984fa493f17de1a3b3f9109ab418a5"
+  },
+  "figures/pymes/crosstabs/pymes_nse_x_p04_bin.png": {
+    "mtime": 1787170164.6557956,
+    "seen": 1787173551.110174,
+    "ast_hash": "d8e9ea8a99881215dc62a67e8cd1e115",
+    "semantic_hash": "d8e9ea8a99881215dc62a67e8cd1e115"
+  },
+  "figures/pymes/crosstabs/pymes_ocupacion_x_p01.png": {
+    "mtime": 1787170162.6666772,
+    "seen": 1787173551.110174,
+    "ast_hash": "864260d827b6ffb333f86b08d82dda93",
+    "semantic_hash": "864260d827b6ffb333f86b08d82dda93"
+  },
+  "figures/pymes/crosstabs/pymes_ocupacion_x_p02.png": {
+    "mtime": 1787170162.9605825,
+    "seen": 1787173551.110175,
+    "ast_hash": "d3679237e7be7acf8d26ac1305f45607",
+    "semantic_hash": "d3679237e7be7acf8d26ac1305f45607"
+  },
+  "figures/pymes/crosstabs/pymes_ocupacion_x_p03.png": {
+    "mtime": 1787170163.2346578,
+    "seen": 1787173551.110175,
+    "ast_hash": "9ebf39590282ffd8929c595785766afb",
+    "semantic_hash": "9ebf39590282ffd8929c595785766afb"
+  },
+  "figures/pymes/crosstabs/pymes_ocupacion_x_p04.png": {
+    "mtime": 1787170163.5162246,
+    "seen": 1787173551.110176,
+    "ast_hash": "96a9ab31a757f5bbbfbee0d2a1bf62c8",
+    "semantic_hash": "96a9ab31a757f5bbbfbee0d2a1bf62c8"
+  },
+  "figures/pymes/crosstabs/pymes_ocupacion_x_p04_bin.png": {
+    "mtime": 1787170163.7591534,
+    "seen": 1787173551.110176,
+    "ast_hash": "9b68594b758e825aa9088a472e72209d",
+    "semantic_hash": "9b68594b758e825aa9088a472e72209d"
+  },
+  "figures/pymes/crosstabs/pymes_sexo_x_p01.png": {
+    "mtime": 1787170159.5996916,
+    "seen": 1787173551.110176,
+    "ast_hash": "52f4e6740f9f57651236076daae93d01",
+    "semantic_hash": "52f4e6740f9f57651236076daae93d01"
+  },
+  "figures/pymes/crosstabs/pymes_sexo_x_p02.png": {
+    "mtime": 1787170159.7754693,
+    "seen": 1787173551.110177,
+    "ast_hash": "cc5d05aafc682a84b489996ce4c327ff",
+    "semantic_hash": "cc5d05aafc682a84b489996ce4c327ff"
+  },
+  "figures/pymes/crosstabs/pymes_sexo_x_p03.png": {
+    "mtime": 1787170159.940015,
+    "seen": 1787173551.110177,
+    "ast_hash": "16476c8cee1d93f6d813ba2f2111b138",
+    "semantic_hash": "16476c8cee1d93f6d813ba2f2111b138"
+  },
+  "figures/pymes/crosstabs/pymes_sexo_x_p04.png": {
+    "mtime": 1787170160.1049404,
+    "seen": 1787173551.110178,
+    "ast_hash": "ef4e2b31c7b757bc7b5d999f5df20b27",
+    "semantic_hash": "ef4e2b31c7b757bc7b5d999f5df20b27"
+  },
+  "figures/pymes/crosstabs/pymes_sexo_x_p04_bin.png": {
+    "mtime": 1787170160.2556086,
+    "seen": 1787173551.110178,
+    "ast_hash": "3970869c34489f27a15beb1cb3e86bba",
+    "semantic_hash": "3970869c34489f27a15beb1cb3e86bba"
+  },
+  "figures/pymes/pymes_edad_bar.png": {
+    "mtime": 1787170158.033607,
+    "seen": 1787173551.1101792,
+    "ast_hash": "7ea68e1899f860ced498510a4cd136b7",
+    "semantic_hash": "7ea68e1899f860ced498510a4cd136b7"
+  },
+  "figures/pymes/pymes_lr_coef_importance.png": {
+    "mtime": 1787170167.8091564,
+    "seen": 1787173551.1101792,
+    "ast_hash": "35ec0616f0de5f116d33f2ef77f415bd",
+    "semantic_hash": "35ec0616f0de5f116d33f2ef77f415bd"
+  },
+  "figures/pymes/pymes_missingness_heatmap.png": {
+    "mtime": 1787170168.4180336,
+    "seen": 1787173551.1101792,
+    "ast_hash": "b28fac2f1c55384f1a1a9143d02f7878",
+    "semantic_hash": "b28fac2f1c55384f1a1a9143d02f7878"
+  },
+  "figures/pymes/pymes_niveduc_bar.png": {
+    "mtime": 1787170158.2039013,
+    "seen": 1787173551.1101801,
+    "ast_hash": "927bd6b94abc6d17d7bf14380383a9f7",
+    "semantic_hash": "927bd6b94abc6d17d7bf14380383a9f7"
+  },
+  "figures/pymes/pymes_nse_bar.png": {
+    "mtime": 1787170158.6555429,
+    "seen": 1787173551.1101801,
+    "ast_hash": "1fc655f95cd7d5f002d71637d0192128",
+    "semantic_hash": "1fc655f95cd7d5f002d71637d0192128"
+  },
+  "figures/pymes/pymes_ocupacion_bar.png": {
+    "mtime": 1787170158.4557772,
+    "seen": 1787173551.110181,
+    "ast_hash": "3ee032f5a8a2f95489f6e39f24308b4c",
+    "semantic_hash": "3ee032f5a8a2f95489f6e39f24308b4c"
+  },
+  "figures/pymes/pymes_p01_bar.png": {
+    "mtime": 1787170158.8034658,
+    "seen": 1787173551.110181,
+    "ast_hash": "4526e5b78cf25ab5ea1f0e3d30d595f5",
+    "semantic_hash": "4526e5b78cf25ab5ea1f0e3d30d595f5"
+  },
+  "figures/pymes/pymes_p02_bar.png": {
+    "mtime": 1787170159.0092528,
+    "seen": 1787173551.1101818,
+    "ast_hash": "b8704f0f33e6e37d669e4577aab91d1a",
+    "semantic_hash": "b8704f0f33e6e37d669e4577aab91d1a"
+  },
+  "figures/pymes/pymes_p03_bar.png": {
+    "mtime": 1787170159.198183,
+    "seen": 1787173551.1101818,
+    "ast_hash": "5cdaafbc458e3b2c5cc1b32c31c4cbb3",
+    "semantic_hash": "5cdaafbc458e3b2c5cc1b32c31c4cbb3"
+  },
+  "figures/pymes/pymes_p04_bar.png": {
+    "mtime": 1787170159.3861852,
+    "seen": 1787173551.1101818,
+    "ast_hash": "497889c854f37dc529aa08bc4ec252af",
+    "semantic_hash": "497889c854f37dc529aa08bc4ec252af"
+  },
+  "figures/pymes/pymes_rf_importance.png": {
+    "mtime": 1787170168.1279898,
+    "seen": 1787173551.110183,
+    "ast_hash": "91043d938bcb906e78bc4898977f819e",
+    "semantic_hash": "91043d938bcb906e78bc4898977f819e"
+  },
+  "figures/pymes/pymes_sexo_bar.png": {
+    "mtime": 1787170157.9294298,
+    "seen": 1787173551.110183,
+    "ast_hash": "59a28fe70e0164e0b1c703e6b3c0724d",
+    "semantic_hash": "59a28fe70e0164e0b1c703e6b3c0724d"
+  }
+}
