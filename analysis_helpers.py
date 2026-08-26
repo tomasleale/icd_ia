@@ -46,11 +46,12 @@ import pandas as pd
 __all__ = [
     "DATA_DIR", "PYMES_PATH", "COMP_PATH", "PYMES_CODES", "COMP_CODES",
     "DEMOGRAPHIC_CODES", "COMP_MULTISELECT", "CATEGORY_ORDERS", "ORDER_NSE",
+    "OCUPACION_TO_ESTADO_LABORAL",
     "PALETTE", "SEQUENTIAL_CMAP", "DIVERGING_CMAP", "THEMES",
     "normalize_text", "strip_accents",
     "preview_columns", "build_rename_map", "load_survey", "lowercase_df",
     "set_labels", "get_label", "get_labels", "copy_labels",
-    "apply_categoricals", "category_report",
+    "apply_categoricals", "category_report", "add_estado_laboral",
     "labeled_head", "labeled_info", "labeled_describe",
     "labeled_value_counts", "labeled_value_counts_detailed", "labeled_crosstab",
     "freq_table", "crosstab_pct", "multiselect_summary", "missingness_report",
@@ -102,6 +103,8 @@ CODE_DESCRIPTIONS: Dict[str, Dict[str, str]] = {
         "p03": "Barreras para el crecimiento del negocio",
         "p03_otro": "P03 - otra respuesta",
         "p04": "Tiempo semanal dispuesto a dedicar a aprender herramientas digitales",
+        "estado_laboral": "Estado laboral (categoria agrupada de ocupacion: "
+                          "empleado / desempleado / estudiante / inactivo)",
     },
     "comp": {
         "id": "ID de respuesta",
@@ -119,6 +122,8 @@ CODE_DESCRIPTIONS: Dict[str, Dict[str, str]] = {
         "p_02e": "Apoyo requerido: ninguno",
         "p02_otro": "P02 - otra respuesta",
         "p03": "Interes en formacion de habilidades via movil",
+        "estado_laboral": "Estado laboral (categoria agrupada de ocupacion: "
+                          "empleado / desempleado / estudiante / inactivo)",
     },
 }
 
@@ -148,6 +153,25 @@ CATEGORY_ORDERS: Dict[str, List[str]] = {
         "empleado(a) administrativo(a) / tecnico",
     ],
     "nse": ["e", "d", "d+e", "c3", "c2", "c1b", "c1a", "ab", "abc1"],
+    "estado_laboral": ["desempleado", "estudiante", "inactivo", "empleado"],
+}
+
+# Groups the 10 observed `ocupacion` values (7 canonicas + 3 fuera de orden
+# jerarquico, ver Seccion 1 de ambos notebooks) en 4 categorias de estado
+# laboral. Empleado incluye trabajo formal e informal (con o sin jerarquia
+# definida); Inactivo agrupa a quienes no participan del mercado laboral por
+# razones distintas al desempleo (dueño(a) de casa, jubilado(a)).
+OCUPACION_TO_ESTADO_LABORAL: Dict[str, str] = {
+    "cesante": "desempleado",
+    "estudiante": "estudiante",
+    "dueño(a) de casa": "inactivo",
+    "jubilado(a)": "inactivo",
+    "oficio menor": "empleado",
+    "oficio calificado": "empleado",
+    "empleado(a) administrativo(a) / tecnico": "empleado",
+    "alto(a) ejecutivo(a)": "empleado",
+    "ejecutivo(a) medio(a) / profesional independiente": "empleado",
+    "trabajos menores e informales": "empleado",
 }
 
 CATEGORY_ALIASES: Dict[str, Dict[str, str]] = {
@@ -490,6 +514,35 @@ def apply_categoricals(df: pd.DataFrame,
                   f"{n_na} missing{flag}")
         print()
     return set_labels(out, labels)
+
+
+def add_estado_laboral(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
+    """Add `estado_laboral`, grouping `ocupacion` into 4 categories.
+
+    Uses OCUPACION_TO_ESTADO_LABORAL to map each of the 10 observed
+    `ocupacion` values (7 canonical + 3 outside the documented hierarchy,
+    see Section 1) into Empleado / Desempleado / Estudiante / Inactivo.
+    `ocupacion` itself is left untouched.
+    """
+    out = df.copy()
+    labels = get_labels(df)
+    raw = out["ocupacion"].astype(object)
+    mapped = raw.map(OCUPACION_TO_ESTADO_LABORAL)
+
+    unmapped = raw[raw.notna() & mapped.isna()].unique().tolist()
+    if unmapped:
+        raise ValueError(
+            f"ocupacion value(s) with no estado_laboral mapping: {unmapped}")
+
+    out["estado_laboral"] = mapped
+    out = set_labels(out, labels)
+    out = apply_categoricals(out, codes=["estado_laboral"], verbose=False)
+
+    if verbose:
+        print("estado_laboral (agrupacion de ocupacion):")
+        print(out["estado_laboral"].value_counts(sort=False, dropna=False))
+        print()
+    return out
 
 
 # =============================================================================

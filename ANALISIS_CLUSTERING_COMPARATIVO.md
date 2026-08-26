@@ -277,27 +277,46 @@ NIVEL 1: SUPERVIVENCIA (Bottom)
 
 ### 4.1 Calidad de Clustering Comparada
 
+> **Corrección (2026-08-26):** la versión anterior de esta tabla reportaba 0.2105 / 1.5262 / 43.5%
+> para *ambos* datasets. Esos valores corresponden únicamente a Competentes (verificado contra el
+> output real de `ia_icd_competentes_analysis.ipynb`, Sección 7); los de PyMEs fueron copiados por
+> error. La tabla siguiente usa el output real de `ia_icd_pymes_analysis.ipynb`, Sección 7, celda de
+> `KMeans(k=4)` (0.1190 / 2.1201), verificado nuevamente contra el notebook tras la Sección 8
+> (re-análisis con `estado_laboral`).
+
 | Métrica | PyMEs | Competentes | Interpretación |
 |---------|-------|-------------|-----------------|
-| **Silhouette Score** | 0.2105 | 0.2105 | Identical - Moderate separation, some overlap |
-| **Davies-Bouldin Score** | 1.5262 | 1.5262 | Identical - Good compactness and separation |
-| **PCA Variance (2D)** | 43.5% | ~42% | Similar - Good 2D visualization possible |
-| **Cluster Balance** | 20-32% | 10-32% | PyMEs más equilibrado; Competentes C1 pequeño |
+| **Silhouette Score** | 0.1190 | 0.2105 | Competentes separa mejor sus 4 clusters |
+| **Davies-Bouldin Score** | 2.1201 | 1.5262 | Competentes más compacto (menor es mejor) |
+| **PCA Variance (2D)** | 33.8% | 43.5% | Competentes se visualiza mejor en 2D |
+| **Cluster Balance** | 19-28% | 10-32% | PyMEs más equilibrado; Competentes C1 pequeño |
 | **Sample Size** | 368 | 503 | Competentes 36% más grande |
 
-**Conclusión:** Ambos clustering son de **igual calidad** - sugiere estructura de datos subyacente similar entre poblaciones.
+**Conclusión corregida:** los clustering **no son de igual calidad** — Competentes produce una
+segmentación notablemente más separada y compacta que PyMEs en las mismas 4 métricas. Esto es
+consistente con la naturaleza de las variables de entrada: Competentes usa 7 features (5
+demográficas + `p01` + `p03`, ambas con pocas categorías), mientras PyMEs usa 9 (5 demográficas +
+`p01`–`p04`, con más categorías y más ruido combinado) — más dimensiones y más niveles por
+variable tienden a diluir la separación en K-Means sobre datos categóricos codificados.
 
 ### 4.2 Robustez de Clasificación
 
 **Estabilidad inter-clusters:**
-- Solapamiento de Silhouette Score idéntico
-- Sugiere que los 4 clusters son "naturales" en ambas poblaciones
-- No es artefacto de método sino estructura real de datos
+- La estructura de 4 clusters es interpretable en ambas poblaciones, pero **no con la misma
+  robustez estadística** — Competentes (Silhouette 0.21) separa sus clusters de forma
+  sustancialmente más clara que PyMEs (Silhouette 0.12, apenas por encima de "sin estructura
+  clara")
+- Que ambas poblaciones converjan en k=4 como punto de equilibrio (método del codo, Sección 7 de
+  cada notebook) sí sugiere que 4 es un número de segmentos razonable en ambos casos, aunque la
+  cohesión interna de esos segmentos sea distinta
 
 **Varianza explicada:**
-- 43.5% en 2D (PCA) es razonable para datos socio-demográficos
-- Implica que demás dimensiones (~56.5%) capturan heterogeneidad dentro de clusters
-- Buen balance entre simplicidad (4 clusters) y complejidad (variables múltiples)
+- 43.5% en 2D (PCA) para Competentes es razonable para datos socio-demográficos; PyMEs es más bajo
+  (33.8%), reflejando mayor dispersión en un espacio de más variables
+- Implica que las demás dimensiones capturan heterogeneidad dentro de clusters, en mayor medida
+  para PyMEs que para Competentes
+- Buen balance entre simplicidad (4 clusters) y complejidad (variables múltiples), aunque con
+  distinta calidad de ajuste por dataset
 
 ---
 
@@ -531,9 +550,10 @@ Segmento D (23%): 201 personas
 
 ### 7.2 La Identidad de PyMEs C3 y Competentes C3
 
-**Observación:** Los dos clusters "Vulnerable" de cada población son estadísticamente idénticos:
-- Silhouette Score: 0.2105 (idéntico)
-- Davies-Bouldin: 1.5262 (idéntico)
+**Observación:** Los dos clusters "Vulnerable" de cada población comparten un perfil demográfico
+y de barreras casi clon (nota: Silhouette/Davies-Bouldin son métricas del *clustering completo*,
+no de un cluster individual — y de hecho difieren entre datasets, ver Sección 4.1 corregida; la
+similitud real está en la composición del cluster, no en esas métricas globales):
 - Distribución demográfica: Prácticamente clon
 - Barrera primaria: Falta de conocimientos (23.7% idéntico)
 - Barrera secundaria: Falta de confianza (18.3% idéntico)
@@ -557,9 +577,89 @@ Segmento D (23%): 201 personas
 
 ---
 
-## Parte 8: Limitaciones y Consideraciones Metodológicas
+## Parte 8: Categoría de Empleo Agrupada (`estado_laboral`)
 
-### 8.1 Limitaciones del Análisis
+**Actualización (2026-08-26).** Ambos notebooks fueron re-ejecutados con una nueva variable
+`estado_laboral`, que agrupa los 10 valores observados de `ocupacion` en 4 categorías: `empleado`,
+`desempleado`, `estudiante`, `inactivo` (`ocupacion` se conserva intacta; ver
+`OCUPACION_TO_ESTADO_LABORAL` en `analysis_helpers.py`). Se repitió el pipeline completo
+(perfil demográfico, crosstabs, pruebas de significancia, correspondencias, clasificación y
+clustering) sustituyendo `ocupacion` por `estado_laboral` en ambos datasets — ver
+`ia_icd_pymes_analysis.ipynb` Sección 8 y `ia_icd_competentes_analysis.ipynb` Sección 9 para el
+detalle celda a celda.
+
+### 8.1 Distribución de `estado_laboral`
+
+| Categoría | PyMEs (n=368) | Competentes (n=503) |
+|---|---|---|
+| **Empleado** | 69.0% (254) | 79.1% (398) |
+| **Inactivo** | 18.5% (68) | 7.0% (35) |
+| **Desempleado** | 6.8% (25) | 10.1% (51) |
+| **Estudiante** | 5.7% (21) | 3.8% (19) |
+
+`inactivo` es 2.6x más frecuente en PyMEs — muchos dueños de PyME declaran `dueño(a) de casa` o
+`jubilado(a)` como ocupación principal pese a operar un negocio. `desempleado` es más frecuente en
+Competentes, consistente con que ese dataset incluye explícitamente personas en búsqueda activa
+de empleo.
+
+### 8.2 Impacto en significancia estadística: resultados opuestos por dataset
+
+| Dataset | Par | p-value con `ocupacion` | p-value con `estado_laboral` | Cambio |
+|---|---|---|---|---|
+| **PyMEs** | `x p01` (tarea que más tiempo consume) | 0.068 (no sig.) | **0.034 (significativo)** | Agrupar **revela** señal |
+| **Competentes** | `x p01` (barrera principal) | 0.084 (no sig.) | 0.674 (no sig.) | Agrupar **diluye** señal |
+| **Competentes** | `x p02_summary_binary` (requiere apoyo activo) | 0.306 (no sig.) | 0.052 (al borde) | Agrupar acerca al umbral |
+
+El efecto de agrupar `ocupacion` en 4 categorías **no es uniforme entre datasets**: en PyMEs
+concentra suficientes casos por celda para que `p01` cruce el umbral de significancia con
+prácticamente el mismo tamaño de efecto (V≈0.096 en ambas versiones) — una mejora metodológica real,
+no artificial. En Competentes ocurre lo inverso para `p01`: la heterogeneidad relevante estaba en
+el detalle fino de `ocupacion` (10 categorías), no en el contraste
+empleado/desempleado/estudiante/inactivo, y se pierde señal al agrupar. Ningún cruce con
+`estado_laboral` es significativo en Competentes.
+
+### 8.3 Impacto en clustering: estabilidad muy distinta por dataset
+
+| Métrica | PyMEs (`ocupacion`→`estado_laboral`) | Competentes (`ocupacion`→`estado_laboral`) |
+|---|---|---|
+| **Silhouette (k=4)** | 0.1190 → 0.1365 (mejora leve) | 0.2105 → 0.2163 (prácticamente igual) |
+| **Davies-Bouldin (k=4)** | 2.1201 → 2.1493 (empeora leve) | 1.5262 → 1.5238 (prácticamente igual) |
+| **Overlap con clusters originales** | **Fragmentado**: solo 1 de 4 clusters mantiene >90% de sus miembros en un único cluster nuevo | **Casi total**: los 4 clusters mantienen 92-99% de sus miembros en un único cluster nuevo |
+
+**Lectura combinada:** en **Competentes**, `ocupacion` resulta prácticamente redundante con las
+otras variables de clustering (sexo, edad, niveduc, nse, p01, p03) — sustituirla por
+`estado_laboral` no cambia la calidad ni la composición de los 4 perfiles de la Parte 1/Sección 7.
+En **PyMEs**, `ocupacion` sí aporta información propia a la segmentación (particularmente para
+distinguir `trabajos menores e informales`, una de las 3 categorías fuera del orden jerárquico) —
+al agruparla, los límites entre clusters se recomponen de forma distinta, y los nuevos segmentos
+**no deben tratarse como equivalentes** a los 4 perfiles descritos en la Parte 1 para PyMEs.
+
+### 8.4 Impacto en clasificación
+
+En ambos datasets, las métricas globales de accuracy/F1 de los modelos baseline (Regresión
+Logística, Random Forest) **no cambian de forma sustantiva** al sustituir `ocupacion` por
+`estado_laboral` — en PyMEs son idénticas hasta el tercer decimal. La diferencia más notable es en
+Competentes: el recall sobre la clase minoritaria "no interesado en formación móvil" **mejora**
+con `estado_laboral` (Random Forest: 8.3% → 16.7%; Regresión Logística: 0% → 8.3%), aunque sobre
+una base de apenas 12 casos de prueba.
+
+### 8.5 Implicancia práctica
+
+- **Competentes:** `estado_laboral` es una simplificación segura para reportes ejecutivos (4
+  categorías en vez de 10) — no sacrifica calidad de clustering ni de clasificación.
+- **PyMEs:** `estado_laboral` mejora la confiabilidad estadística del cruce con `p01`, pero **no
+  debe usarse como sustituto directo de `ocupacion` en el clustering** sin advertir que produce
+  segmentos distintos a los reportados en la Parte 1.
+- En ambos casos, la corrección de la Sección 4.1 (PyMEs y Competentes **no** tienen métricas de
+  clustering idénticas) es relevante aquí: el dataset donde `ocupacion` ya explicaba menos de la
+  segmentación (Competentes, mayor Silhouette, mayor redundancia) es también el que tolera mejor
+  agruparla.
+
+---
+
+## Parte 9: Limitaciones y Consideraciones Metodológicas
+
+### 9.1 Limitaciones del Análisis
 
 1. **Transversalidad:** Datos capturan un momento, no cambio en el tiempo
    - No sabemos si alguien progresa de C3 a C0 tras intervención
@@ -585,7 +685,7 @@ Segmento D (23%): 201 personas
    - Silhouette/Davies-Bouldin miden separación, no "realidad" del cluster
    - Posible que 5 o 3 clusters sean más interpretables
 
-### 8.2 Recomendaciones para Investigación Futura
+### 9.2 Recomendaciones para Investigación Futura
 
 1. **Estudio Longitudinal:**
    - Re-encuesta mismas personas en 6-12-24 meses
@@ -672,3 +772,7 @@ Segmento D (23%): 201 personas
 - clustering_validation_metrics_competentes.png (existente)
 - clustering_pca_visualization_competentes.png (existente)
 - clustering_demographic_comparison_competentes.png (existente)
+- clustering_pca_visualization_pymes_estado_laboral.png (Parte 8)
+- clustering_pca_visualization_comp_estado_laboral.png (Parte 8)
+- ca_estado_laboral_x_p01.png (`figures/pymes/ca_biplots/` y `figures/comp/ca_biplots/`, Parte 8)
+- pymes_estado_laboral_x_{p01,p02,p03,p04,p04_bin}.png (`figures/pymes/crosstabs/`, Parte 8)

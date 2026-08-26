@@ -126,6 +126,50 @@ The phrase encapsulates critical findings from Step 10 (USE_CASES.md):
 
 ---
 
+## Update (2026-08-26): Employment Category Grouping (`estado_laboral`)
+
+Both notebooks were extended with a new section that groups the 10 observed `ocupacion` values
+into 4 employment-status categories — `empleado`, `desempleado`, `estudiante`, `inactivo`
+(`ocupacion` itself is preserved; see `add_estado_laboral()` in `analysis_helpers.py`) — and
+re-runs the full pipeline (demographic profile, crosstabs, significance tests, correspondence
+analysis, classification, clustering) with the grouped variable. Full detail in
+`ia_icd_pymes_analysis.ipynb` Section 8, `ia_icd_competentes_analysis.ipynb` Section 9, and
+`ANALISIS_CLUSTERING_COMPARATIVO.md` Part 8.
+
+**Headline findings:**
+
+1. **The effect of grouping is dataset-specific, not universal.** In PyMEs, `estado_laboral x p01`
+   becomes statistically significant (p=0.034) where `ocupacion x p01` was not (p=0.068), at
+   essentially the same effect size (V≈0.096) — grouping concentrates enough cases per cell to
+   cross the significance threshold. In Competentes, the opposite happens: `ocupacion x p01`
+   (p=0.084, the strongest non-significant pair in that dataset) loses signal when grouped
+   (p=0.674) — the relevant heterogeneity there lives in the fine-grained occupation categories,
+   not the 4-way employment-status split.
+2. **Clustering redundancy also differs by dataset.** In Competentes, swapping `ocupacion` for
+   `estado_laboral` leaves clustering quality (Silhouette/Davies-Bouldin) and cluster membership
+   (92–99% overlap with the original clusters) essentially unchanged — `ocupacion` was largely
+   redundant with the other clustering features there. In PyMEs, overlap with the original
+   clusters is fragmented (only 1 of 4 clusters keeps >90% of its members together) — `ocupacion`
+   contributes information to the PyMEs segmentation that `estado_laboral` does not fully
+   reproduce, so the two clusterings should not be treated as equivalent.
+3. **Classification metrics are essentially unchanged** in both datasets when swapping the
+   feature; the one real gain is in Competentes, where minority-class recall for "not interested
+   in mobile training" improves (Random Forest 8.3%→16.7%, Logistic Regression 0%→8.3%) — on a
+   thin base of 12 test cases.
+4. **Correction applied while updating this analysis:** `ANALISIS_CLUSTERING_COMPARATIVO.md`
+   previously reported identical Silhouette (0.2105) and Davies-Bouldin (1.5262) scores for both
+   PyMEs and Competentes clustering. That was a copy-paste error — PyMEs' real k=4 values (verified
+   against the executed notebook) are Silhouette 0.1190, Davies-Bouldin 2.1201, meaningfully worse
+   than Competentes'. The document has been corrected; see Part 4.1 there for the fixed table and
+   explanation.
+
+**Practical takeaway:** `estado_laboral` is a safe simplification for executive reporting in
+Competentes (no loss of clustering or classification quality). In PyMEs it improves the
+reliability of the `p01` association but should **not** replace `ocupacion` in the clustering
+model without flagging that the resulting segments differ from those reported above.
+
+---
+
 ## Use-Case Recommendations: Ranked Priority
 
 **Full design:** See USE_CASES.md. Quick reference below.
@@ -252,6 +296,8 @@ A: Outcome tracking before high-stakes deployment. UC1, UC2, UC5: current data e
 - `/Users/tomas/github/icd_ia/USE_CASES.md`
 - `/Users/tomas/github/icd_ia/PIPELINE_PLAN.md`
 - `/Users/tomas/github/icd_ia/CLAUDE.md`
+- `/Users/tomas/github/icd_ia/ANALISIS_CLUSTERING_COMPARATIVO.md` — clustering deep-dive
+  (Spanish), including the `estado_laboral` re-analysis (Part 8)
 
 **Data:**
 - `data/ia_pymes.xlsx`
