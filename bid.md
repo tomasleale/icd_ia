@@ -5,7 +5,7 @@ Ricardo León1, Tomás Leal, Benjamín Barros y Daniel Venegas
 Centro de Estudios Digitales
 Fundación País Digital
 
-Abstract
+Abstract/Resumen
 
 Este estudio tuvo como objetivo evaluar los factores que influyen positiva y negativamente
 en  la  adopción  de  FirmaGob,  el  sistema  de  firma  digital  avanzada  para  instituciones
